@@ -76,6 +76,37 @@ automation:
           message: "Next train to Kheha in {{ states('sensor.asok_kheha_next_train') }} min"
 ```
 
+### Only update during certain hours
+
+By default the integration checks the API all day. To check it only when you
+need it, for example on weekday mornings:
+
+1. Go to **Settings > Devices & services > BTS Skytrain Arrival Time**, open
+   the **⋮** menu on the entry, select **System options** and turn off
+   **Enable polling for updates**.
+2. Add an automation that refreshes the sensors during your time window:
+
+```yaml
+automation:
+  - alias: "BTS arrivals: morning refresh"
+    triggers:
+      - trigger: time_pattern
+        seconds: "/30"
+    conditions:
+      - condition: time
+        after: "06:30:00"
+        before: "09:30:00"
+        weekday: [mon, tue, wed, thu, fri]
+    actions:
+      - action: homeassistant.update_entity
+        target:
+          entity_id: sensor.asok_kheha_next_train
+```
+
+Updating one sensor refreshes all the sensors of that station and direction.
+Outside the window the sensors keep their last values, so they will be out of
+date until the window starts again.
+
 ## Development
 
 ```bash
