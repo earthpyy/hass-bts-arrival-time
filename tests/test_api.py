@@ -77,6 +77,13 @@ def test_parse_arrivals_interchange() -> None:
     assert arrivals.platform_for("9:XX") is None
 
 
+def test_parse_arrivals_line_color() -> None:
+    raw = load_fixture("arrivals_e4.json")["data"]
+    assert parse_arrivals(raw).platforms[0].line_color == "#7AB420"
+    del raw["platform_list"][0]["LineColor"]
+    assert parse_arrivals(raw).platforms[0].line_color == ""
+
+
 async def test_client_arrivals(hass, aioclient_mock) -> None:
     aioclient_mock.post(ARRIVAL_URL, json=load_fixture("arrivals_e4.json"))
     client = BtsApiClient(async_get_clientsession(hass))

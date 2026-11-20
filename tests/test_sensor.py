@@ -87,6 +87,8 @@ async def test_sensors(
     assert nxt.attributes["platform"] == "1"
     assert nxt.attributes["destination_name"] == "Kheha"
     assert nxt.attributes["station_name_th"] == "อโศก"
+    assert nxt.attributes["station_name"] == "Asok"
+    assert nxt.attributes["line_color"] == "#7AB420"
     assert nxt.attributes["no_service"] is False
     assert len(nxt.attributes["upcoming"]) == 3
 
@@ -129,6 +131,20 @@ async def test_no_service(
     assert state.state == STATE_UNKNOWN
     assert state.attributes["no_service"] is True
     assert hass.states.get("sensor.asok_kheha_next_arrival").state == STATE_UNKNOWN
+
+
+async def test_platform_missing_attributes(
+    hass: HomeAssistant, entry, mock_client, freezer: FrozenDateTimeFactory
+) -> None:
+    def no_platforms(raw):
+        raw["platform_list"] = []
+
+    mock_client.async_get_arrivals.return_value = _arrivals(no_platforms)
+    await _setup(hass, entry, freezer)
+    state = hass.states.get("sensor.asok_kheha_next_train")
+    assert state.attributes["platform_missing"] is True
+    assert state.attributes["station_name"] == "Asok"
+    assert "line_color" not in state.attributes
 
 
 async def test_api_failure_marks_unavailable(

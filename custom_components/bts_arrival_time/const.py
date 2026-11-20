@@ -18,6 +18,10 @@ CONF_DESTINATION_KEY: Final = "destination_key"
 CONF_STATION_NAME: Final = "station_name"
 CONF_DESTINATION_NAME: Final = "destination_name"
 
+# Dashboard card bundle served by the integration.
+CARD_FILENAME: Final = "bts-arrival-card.js"
+CARD_URL: Final = f"/{DOMAIN}/{CARD_FILENAME}"
+
 DEFAULT_SCAN_INTERVAL: Final = timedelta(seconds=30)
 MIN_SCAN_INTERVAL_SECONDS: Final = 15
 
