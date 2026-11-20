@@ -118,6 +118,7 @@ class Platform:
     destination_key: str
     destination_en: str
     destination_th: str
+    line_color: str = ""
     trains: list[Train] = field(default_factory=list)
 
     @property
@@ -233,6 +234,7 @@ def parse_arrivals(data: dict[str, Any]) -> StationArrivals:
                 destination_key=str(item.get("DestinationStation_key", "")),
                 destination_en=dest_en,
                 destination_th=dest_th,
+                line_color=str(item.get("LineColor") or ""),
                 trains=trains,
             )
         )

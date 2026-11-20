@@ -127,6 +127,7 @@ class BtsArrivalSensor(CoordinatorEntity[BtsArrivalCoordinator], SensorEntity):
         platform = data.platform
         attrs: dict[str, Any] = {
             "station_key": data.arrivals.station_key,
+            "station_name": data.arrivals.name_en,
             "station_name_th": data.arrivals.name_th,
             "api_updated": data.arrivals.updated,
             "no_service": not _trains(data),
@@ -141,6 +142,7 @@ class BtsArrivalSensor(CoordinatorEntity[BtsArrivalCoordinator], SensorEntity):
                 "destination_key": platform.destination_key,
                 "destination_name": platform.destination_en,
                 "destination_name_th": platform.destination_th,
+                "line_color": platform.line_color,
             }
         )
         if self.entity_description.key == "next_train_minutes":

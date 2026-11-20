@@ -105,7 +105,44 @@ automation:
 
 Updating one sensor refreshes all the sensors of that station and direction.
 Outside the window the sensors keep their last values, so they will be out of
-date until the window starts again.
+date until the window starts again. You can also update them at any time with
+the refresh button on the [dashboard card](#dashboard-card).
+
+## Dashboard card
+
+The integration includes a **BTS Arrivals** dashboard card. It loads
+automatically once the integration is set up, so you don't need to add a
+dashboard resource. Refresh your browser after installing or updating.
+
+Edit a dashboard, select **Add card** and pick **BTS Arrivals**, or use YAML:
+
+```yaml
+type: custom:bts-arrival-card
+title: My commute
+entities:
+  - sensor.asok_kheha_next_train
+  - sensor.asok_khu_khot_next_train
+trains: 3
+language: auto
+```
+
+<!-- TODO: screenshot -->
+
+| Option     | Default  | Description                                                                 |
+| ---------- | -------- | --------------------------------------------------------------------------- |
+| `entities` | required | The **Next train** sensors to show, one row each. Any stations, any order. |
+| `title`    | none     | Card title.                                                                 |
+| `trains`   | `3`      | How many upcoming trains to show per row (1 to 3).                          |
+| `language` | `auto`   | `auto` follows your Home Assistant language; `en` or `th` forces one.       |
+
+Each row shows the line colour, the station and direction, and the minutes
+until the next trains. A row shows **No service** when no trains are
+running, **Direction not found** when BTS no longer lists that direction,
+and **Unavailable** when the sensor can't be updated.
+
+The footer shows when BTS last updated the data. It turns orange when the
+data is more than 3 minutes old. The refresh button updates every row
+straight away.
 
 ## Development
 
@@ -114,6 +151,16 @@ python -m venv .venv && . .venv/bin/activate
 pip install -r requirements_test.txt ruff
 pytest
 ruff check custom_components tests && ruff format --check custom_components tests
+```
+
+The dashboard card's source is in `frontend/`. After changing it, rebuild the
+bundle and commit `custom_components/bts_arrival_time/frontend/bts-arrival-card.js`:
+
+```bash
+cd frontend
+npm install
+npm run lint && npm test
+npm run build
 ```
 
 ## Disclaimer
