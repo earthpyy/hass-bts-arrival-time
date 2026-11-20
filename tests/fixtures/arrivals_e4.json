@@ -1,0 +1,86 @@
+{
+ "ErrCode": 0,
+ "IsSuccess": true,
+ "ErrMessage": "Success",
+ "data": {
+  "StationName_TH": "อโศก",
+  "StationName_EN": "Asok",
+  "StationKey": "E4",
+  "LineColor": "#7AB420",
+  "time": "20/11/2026 15:16",
+  "platform_list": [
+   {
+    "platform": "1",
+    "LineColor": "#7AB420",
+    "LineId": 1,
+    "DestinationStation": "เคหะฯ  | Kheha",
+    "DestinationStation_key": "E23",
+    "train_list": [
+     {
+      "trainNo": "039",
+      "station": "เคหะฯ  | Kheha",
+      "station_key": "E23",
+      "time_come": "1",
+      "time_come_num": 1,
+      "time_come_double": 1.68450734,
+      "status": "pending"
+     },
+     {
+      "trainNo": "047",
+      "station": "เคหะฯ  | Kheha",
+      "station_key": "E23",
+      "time_come": "7",
+      "time_come_num": 7,
+      "time_come_double": 7.884507131666667,
+      "status": "pending"
+     },
+     {
+      "trainNo": "014",
+      "station": "เคหะฯ  | Kheha",
+      "station_key": "E23",
+      "time_come": "13",
+      "time_come_num": 13,
+      "time_come_double": 13.96784042,
+      "status": "pending"
+     }
+    ]
+   },
+   {
+    "platform": "2",
+    "LineColor": "#7AB420",
+    "LineId": 1,
+    "DestinationStation": "คูคต | Khu Khot",
+    "DestinationStation_key": "N24",
+    "train_list": [
+     {
+      "trainNo": "012",
+      "station": "คูคต | Khu Khot",
+      "station_key": "N24",
+      "time_come": "0",
+      "time_come_num": 0,
+      "time_come_double": 0.8323420066666667,
+      "status": "arriving"
+     },
+     {
+      "trainNo": "015",
+      "station": "คูคต | Khu Khot",
+      "station_key": "N24",
+      "time_come": "6",
+      "time_come_num": 6,
+      "time_come_double": 6.382341911666667,
+      "status": "pending"
+     },
+     {
+      "trainNo": "018",
+      "station": "คูคต | Khu Khot",
+      "station_key": "N24",
+      "time_come": "14",
+      "time_come_num": 14,
+      "time_come_double": 14.01567519,
+      "status": "pending"
+     }
+    ]
+   }
+  ]
+ }
+}

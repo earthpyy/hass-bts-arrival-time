@@ -1,0 +1,158 @@
+{
+ "ErrCode": 0,
+ "IsSuccess": true,
+ "ErrMessage": "Success",
+ "data": {
+  "StationName_TH": "สยาม",
+  "StationName_EN": "Siam",
+  "StationKey": "CEN",
+  "LineColor": "#7AB420",
+  "time": "20/11/2026 15:16",
+  "platform_list": [
+   {
+    "platform": "1",
+    "LineColor": "#7AB420",
+    "LineId": 1,
+    "DestinationStation": "เคหะฯ  | Kheha",
+    "DestinationStation_key": "E23",
+    "train_list": [
+     {
+      "trainNo": "047",
+      "station": "เคหะฯ  | Kheha",
+      "station_key": "E23",
+      "time_come": "0",
+      "time_come_num": 0,
+      "time_come_double": 0.6882477066666667,
+      "status": "arriving"
+     },
+     {
+      "trainNo": "014",
+      "station": "เคหะฯ  | Kheha",
+      "station_key": "E23",
+      "time_come": "6",
+      "time_come_num": 6,
+      "time_come_double": 6.77158084,
+      "status": "pending"
+     },
+     {
+      "trainNo": "054",
+      "station": "เคหะฯ  | Kheha",
+      "station_key": "E23",
+      "time_come": "13",
+      "time_come_num": 13,
+      "time_come_double": 13.70491413,
+      "status": "pending"
+     }
+    ]
+   },
+   {
+    "platform": "2",
+    "LineColor": "#7AB420",
+    "LineId": 1,
+    "DestinationStation": "คูคต | Khu Khot",
+    "DestinationStation_key": "N24",
+    "train_list": [
+     {
+      "trainNo": "008",
+      "station": "คูคต | Khu Khot",
+      "station_key": "N24",
+      "time_come": "2",
+      "time_come_num": 2,
+      "time_come_double": 2.602881738333333,
+      "status": "pending"
+     },
+     {
+      "trainNo": "012",
+      "station": "คูคต | Khu Khot",
+      "station_key": "N24",
+      "time_come": "7",
+      "time_come_num": 7,
+      "time_come_double": 7.969548251666667,
+      "status": "pending"
+     },
+     {
+      "trainNo": "015",
+      "station": "คูคต | Khu Khot",
+      "station_key": "N24",
+      "time_come": "13",
+      "time_come_num": 13,
+      "time_come_double": 13.519548161666666,
+      "status": "pending"
+     }
+    ]
+   },
+   {
+    "platform": "3",
+    "LineColor": "#00807D",
+    "LineId": 2,
+    "DestinationStation": "บางหว้า | Bang Wa",
+    "DestinationStation_key": "S12",
+    "train_list": [
+     {
+      "trainNo": "122",
+      "station": "บางหว้า | Bang Wa",
+      "station_key": "S12",
+      "time_come": "2",
+      "time_come_num": 2,
+      "time_come_double": 2.133988801666667,
+      "status": "pending"
+     },
+     {
+      "trainNo": "117",
+      "station": "บางหว้า | Bang Wa",
+      "station_key": "S12",
+      "time_come": "12",
+      "time_come_num": 12,
+      "time_come_double": 12.933988703333334,
+      "status": "pending"
+     },
+     {
+      "trainNo": "111",
+      "station": "บางหว้า | Bang Wa",
+      "station_key": "S12",
+      "time_come": "20",
+      "time_come_num": 20,
+      "time_come_double": 20.150655331666666,
+      "status": "pending"
+     }
+    ]
+   },
+   {
+    "platform": "4",
+    "LineColor": "#00807D",
+    "LineId": 2,
+    "DestinationStation": "สนามกีฬาแห่งชาติ | National Stadium",
+    "DestinationStation_key": "W1",
+    "train_list": [
+     {
+      "trainNo": "117",
+      "station": "สนามกีฬาแห่งชาติ | National Stadium",
+      "station_key": "W1",
+      "time_come": "6",
+      "time_come_num": 6,
+      "time_come_double": 6.381630653333334,
+      "status": "pending"
+     },
+     {
+      "trainNo": "111",
+      "station": "สนามกีฬาแห่งชาติ | National Stadium",
+      "station_key": "W1",
+      "time_come": "13",
+      "time_come_num": 13,
+      "time_come_double": 13.59829721,
+      "status": "pending"
+     },
+     {
+      "trainNo": "102",
+      "station": "สนามกีฬาแห่งชาติ | National Stadium",
+      "station_key": "W1",
+      "time_come": "19",
+      "time_come_num": 19,
+      "time_come_double": 19.564963825,
+      "status": "pending"
+     }
+    ]
+   }
+  ]
+ }
+}

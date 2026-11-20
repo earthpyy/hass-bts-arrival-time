@@ -1,0 +1,56 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Choose a station",
+        "description": "Pick the BTS station you want arrival times for.",
+        "data": {
+          "station_key": "Station"
+        }
+      },
+      "direction": {
+        "title": "Choose a direction",
+        "description": "Which direction at {station}?",
+        "data": {
+          "direction": "Direction"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Could not reach the BTS arrival service. Try again.",
+      "line_unavailable": "BTS is not publishing arrival times for this station's line right now.",
+      "station_not_found": "The BTS arrival service does not know this station.",
+      "no_platforms": "No platforms were returned for this station. Try again later.",
+      "unknown": "Unexpected error."
+    },
+    "abort": {
+      "already_configured": "This station and direction is already configured.",
+      "cannot_connect": "Could not load the BTS station list. Try again.",
+      "no_stations": "The BTS station list was empty.",
+      "unknown": "Unexpected error."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Polling",
+        "data": {
+          "scan_interval": "Update interval (seconds)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "next_train_minutes": {
+        "name": "Next train"
+      },
+      "following_train_minutes": {
+        "name": "Following train"
+      },
+      "next_arrival": {
+        "name": "Next arrival"
+      }
+    }
+  }
+}
