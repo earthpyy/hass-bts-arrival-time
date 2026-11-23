@@ -56,6 +56,7 @@ export class BtsArrivalCard extends LitElement {
   private _cooldown = false;
   private _tick?: ReturnType<typeof setInterval>;
   private _cooldownTimer?: ReturnType<typeof setTimeout>;
+  private _autoRefreshPending = false;
 
   static getConfigElement(): HTMLElement {
     return document.createElement(EDITOR_TAG);
@@ -77,6 +78,9 @@ export class BtsArrivalCard extends LitElement {
   connectedCallback(): void {
     super.connectedCallback();
     this._tick = setInterval(() => this.requestUpdate(), FOOTER_TICK_MS);
+    this._autoRefreshPending = true;
+    document.addEventListener("visibilitychange", this._onVisibilityChange);
+    this._maybeAutoRefresh();
   }
 
   disconnectedCallback(): void {
@@ -84,7 +88,29 @@ export class BtsArrivalCard extends LitElement {
     clearInterval(this._tick);
     clearTimeout(this._cooldownTimer);
     this._cooldown = false;
+    document.removeEventListener("visibilitychange", this._onVisibilityChange);
   }
+
+  protected updated(changed: PropertyValues): void {
+    super.updated(changed);
+    this._maybeAutoRefresh();
+  }
+
+  /** Refresh once when the card is shown, if `auto_refresh` is on. */
+  private _maybeAutoRefresh(): void {
+    if (!this._autoRefreshPending || !this.hass || !this._config) return;
+    this._autoRefreshPending = false;
+    if (this._config.auto_refresh && document.visibilityState !== "hidden") {
+      // Errors are not actionable here; the footer shows stale data anyway.
+      this._refresh().catch(() => undefined);
+    }
+  }
+
+  private _onVisibilityChange = (): void => {
+    if (document.visibilityState !== "visible") return;
+    this._autoRefreshPending = true;
+    this._maybeAutoRefresh();
+  };
 
   protected shouldUpdate(changed: PropertyValues): boolean {
     if (!this._config) return false;

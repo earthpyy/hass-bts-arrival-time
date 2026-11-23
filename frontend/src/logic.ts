@@ -78,7 +78,15 @@ export function trainLabels(
   if (!Array.isArray(upcoming)) return [];
   return upcoming.slice(0, count).map((train) => {
     const status = train?.status;
-    if (status === "arriving" || status === "arrival") {
+    const minutes = Number(train?.minutes);
+    // A train due in under a minute (or reported late, or wrapped around
+    // midnight by older integration versions) is shown as arriving rather
+    // than as "0" or a negative number.
+    if (
+      status === "arriving" ||
+      status === "arrival" ||
+      (Number.isFinite(minutes) && minutes <= 0)
+    ) {
       return STRINGS[lang].arriving;
     }
     return String(train?.minutes ?? "");
@@ -107,6 +115,7 @@ export function normalizeConfig(config: unknown): CardConfig {
     entities: [...entities],
     trains,
     language,
+    auto_refresh: raw.auto_refresh === true,
   };
   if (typeof raw.title === "string" && raw.title) result.title = raw.title;
   return result;
@@ -125,5 +134,6 @@ export function mergeEditorConfig(
   if (!config.title) delete config.title;
   if (config.trains === MAX_TRAINS) delete config.trains;
   if (config.language === "auto") delete config.language;
+  if (!config.auto_refresh) delete config.auto_refresh;
   return config;
 }

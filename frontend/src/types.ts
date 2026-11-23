@@ -6,6 +6,7 @@ export interface CardConfig {
   entities: string[];
   trains: number;
   language: "auto" | Language;
+  auto_refresh: boolean;
 }
 
 export interface HassEntity {

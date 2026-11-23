@@ -184,6 +184,24 @@ def _to_float(value: Any, default: float) -> float:
         return default
 
 
+MINUTES_PER_DAY = 1440
+
+
+def _normalize_minutes(value: float) -> float:
+    """Undo day wrap-around and clamp trains that are already due.
+
+    The API computes the wait from clock times of day, so near midnight a
+    train due at 00:03 when it is 23:58 comes back as about -1435 minutes
+    (and the reverse case as about +1435). Anything still negative after
+    unwrapping is a train that is due or running late, so it counts as 0.
+    """
+    if value < -MINUTES_PER_DAY / 2:
+        value += MINUTES_PER_DAY
+    elif value > MINUTES_PER_DAY / 2:
+        value -= MINUTES_PER_DAY
+    return max(value, 0.0)
+
+
 def parse_stations(data: list[dict[str, Any]]) -> list[Station]:
     """Parse the StationList ``data`` array into a flat list of stations."""
     stations: list[Station] = []
@@ -215,7 +233,11 @@ def parse_arrivals(data: dict[str, Any]) -> StationArrivals:
         trains: list[Train] = []
         for raw in item.get("train_list") or []:
             t_en, t_th = split_name(raw.get("station"))
-            minutes = _to_int(raw.get("time_come_num", raw.get("time_come")))
+            raw_minutes = _to_int(raw.get("time_come_num", raw.get("time_come")))
+            minutes = int(_normalize_minutes(raw_minutes))
+            minutes_exact = _normalize_minutes(
+                _to_float(raw.get("time_come_double"), raw_minutes)
+            )
             trains.append(
                 Train(
                     train_no=str(raw.get("trainNo", "")),
@@ -223,7 +245,7 @@ def parse_arrivals(data: dict[str, Any]) -> StationArrivals:
                     destination_en=t_en,
                     destination_th=t_th,
                     minutes=minutes,
-                    minutes_exact=_to_float(raw.get("time_come_double"), minutes),
+                    minutes_exact=minutes_exact,
                     status=str(raw.get("status", "")),
                 )
             )
@@ -235,7 +257,7 @@ def parse_arrivals(data: dict[str, Any]) -> StationArrivals:
                 destination_en=dest_en,
                 destination_th=dest_th,
                 line_color=str(item.get("LineColor") or ""),
-                trains=trains,
+                trains=sorted(trains, key=lambda t: t.minutes_exact),
             )
         )
     return StationArrivals(
