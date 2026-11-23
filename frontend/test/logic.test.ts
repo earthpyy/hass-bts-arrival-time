@@ -115,6 +115,20 @@ describe("trainLabels", () => {
     ]);
     expect(trainLabels(undefined, 3, "en")).toEqual([]);
   });
+
+  it("shows zero or negative minutes as arriving", () => {
+    expect(
+      trainLabels(
+        [
+          { minutes: 0, status: "pending" },
+          { minutes: -1435, status: "pending" },
+          { minutes: 5, status: "pending" },
+        ],
+        3,
+        "en",
+      ),
+    ).toEqual(["Arriving", "Arriving", "5"]);
+  });
 });
 
 describe("normalizeConfig", () => {
@@ -132,6 +146,14 @@ describe("normalizeConfig", () => {
     expect(config.trains).toBe(3);
     expect(config.language).toBe("auto");
     expect(config.title).toBeUndefined();
+    expect(config.auto_refresh).toBe(false);
+  });
+
+  it("reads auto_refresh", () => {
+    expect(
+      normalizeConfig({ entities: ["sensor.a"], auto_refresh: true })
+        .auto_refresh,
+    ).toBe(true);
   });
 
   it.each([
@@ -172,9 +194,15 @@ describe("mergeEditorConfig", () => {
       title: "Old",
       trains: 2,
       language: "th",
+      auto_refresh: true,
     };
     expect(
-      mergeEditorConfig(raw, { title: "", trains: 3, language: "auto" }),
+      mergeEditorConfig(raw, {
+        title: "",
+        trains: 3,
+        language: "auto",
+        auto_refresh: false,
+      }),
     ).toEqual({ type: "custom:bts-arrival-card", entities: ["sensor.a"] });
   });
 });

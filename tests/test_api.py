@@ -128,3 +128,24 @@ async def test_client_stations(hass, aioclient_mock) -> None:
     client = BtsApiClient(async_get_clientsession(hass))
     stations = await client.async_get_stations()
     assert len(stations) == 119
+
+
+def test_parse_arrivals_midnight_and_late() -> None:
+    raw = load_fixture("arrivals_e4.json")["data"]
+    trains = raw["platform_list"][0]["train_list"]
+    # 23:58 now, train due 00:03 -> API reports about -1435 minutes.
+    trains[0].update(
+        time_come="-1435",
+        time_come_num=-1435,
+        time_come_double=-1434.6,
+        status="pending",
+    )
+    # Train running a little late.
+    trains[1].update(
+        time_come="-1", time_come_num=-1, time_come_double=-0.8, status="pending"
+    )
+    platform = parse_arrivals(raw).platforms[0]
+    minutes = [t.minutes for t in platform.trains]
+    assert all(m >= 0 for m in minutes)
+    assert minutes[:2] == [0, 5]
+    assert platform.trains[1].minutes_exact == pytest.approx(5.4)

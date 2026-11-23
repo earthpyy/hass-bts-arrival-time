@@ -22,12 +22,14 @@ const SCHEMA = [
       },
     },
   },
+  { name: "auto_refresh", selector: { boolean: {} } },
 ];
 
 const LABELS: Record<string, string> = {
   title: "Title",
   trains: "Trains per row",
   language: "Language",
+  auto_refresh: "Refresh when the dashboard opens",
 };
 
 interface HelpersCard {
@@ -131,6 +133,7 @@ export class BtsArrivalCardEditor extends LitElement {
       title: value.title,
       trains: value.trains ?? 3,
       language: value.language ?? "auto",
+      auto_refresh: value.auto_refresh ?? false,
     });
   }
 

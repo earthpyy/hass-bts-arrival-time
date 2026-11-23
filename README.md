@@ -124,21 +124,24 @@ entities:
   - sensor.asok_khu_khot_next_train
 trains: 3
 language: auto
+auto_refresh: true
 ```
 
 <!-- TODO: screenshot -->
 
-| Option     | Default  | Description                                                                 |
-| ---------- | -------- | --------------------------------------------------------------------------- |
-| `entities` | required | The **Next train** sensors to show, one row each. Any stations, any order. |
-| `title`    | none     | Card title.                                                                 |
-| `trains`   | `3`      | How many upcoming trains to show per row (1 to 3).                          |
-| `language` | `auto`   | `auto` follows your Home Assistant language; `en` or `th` forces one.       |
+| Option         | Default  | Description                                                                |
+| -------------- | -------- | -------------------------------------------------------------------------- |
+| `entities`     | required | The **Next train** sensors to show, one row each. Any stations, any order. |
+| `title`        | none     | Card title.                                                                |
+| `trains`       | `3`      | How many upcoming trains to show per row (1 to 3).                         |
+| `language`     | `auto`   | `auto` follows your Home Assistant language; `en` or `th` forces one.      |
+| `auto_refresh` | `false`  | Refresh the sensors when the dashboard opens or comes back into view.      |
 
 Each row shows the line colour, the station and direction, and the minutes
 until the next trains. A row shows **No service** when no trains are
 running, **Direction not found** when BTS no longer lists that direction,
-and **Unavailable** when the sensor can't be updated.
+and **Unavailable** when the sensor can't be updated. A train due in under
+a minute shows as **Arriving**.
 
 The footer shows when BTS last updated the data. It turns orange when the
 data is more than 3 minutes old. The refresh button updates every row
