@@ -15,6 +15,10 @@ jobs:
       - uses: home-assistant/actions/hassfest@master
 
   hacs:
+    # HACS loads the branch from GitHub rather than the checkout, so a PR run
+    # fails with "Not Found" if the branch is deleted on merge before it
+    # starts. The push run already checks the same commit.
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: hacs/action@main
