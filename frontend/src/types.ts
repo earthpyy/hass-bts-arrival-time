@@ -24,10 +24,15 @@ export interface HomeAssistant {
   states: Record<string, HassEntity>;
   entities: Record<string, HassEntityRegistryEntry>;
   locale: { language: string };
+  /** False while the frontend is reconnecting to Home Assistant. */
+  connected?: boolean;
+  services?: Record<string, Record<string, unknown>>;
   callService(
     domain: string,
     service: string,
     data?: Record<string, unknown>,
+    target?: Record<string, unknown>,
+    notifyOnError?: boolean,
   ): Promise<unknown>;
 }
 

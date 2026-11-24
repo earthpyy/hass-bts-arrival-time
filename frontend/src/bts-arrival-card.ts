@@ -91,19 +91,30 @@ export class BtsArrivalCard extends LitElement {
     document.removeEventListener("visibilitychange", this._onVisibilityChange);
   }
 
-  protected updated(changed: PropertyValues): void {
-    super.updated(changed);
-    this._maybeAutoRefresh();
+  /**
+   * Refresh once when the card is shown, if `auto_refresh` is on.
+   *
+   * When the dashboard opens, or the app comes back from the background,
+   * the frontend is often still (re)connecting to Home Assistant. Calling
+   * the action then fails with a "Failed to perform the action" toast, so
+   * wait until the connection is up and the action is known.
+   */
+  private _maybeAutoRefresh(): void {
+    if (!this._autoRefreshPending || !this._config) return;
+    if (!this._config.auto_refresh || document.visibilityState === "hidden") {
+      this._autoRefreshPending = false;
+      return;
+    }
+    if (!this._hassReady()) return; // retried on the next `hass` update
+    this._autoRefreshPending = false;
+    // Errors are not actionable here; the footer shows stale data anyway.
+    this._refresh(true).catch(() => undefined);
   }
 
-  /** Refresh once when the card is shown, if `auto_refresh` is on. */
-  private _maybeAutoRefresh(): void {
-    if (!this._autoRefreshPending || !this.hass || !this._config) return;
-    this._autoRefreshPending = false;
-    if (this._config.auto_refresh && document.visibilityState !== "hidden") {
-      // Errors are not actionable here; the footer shows stale data anyway.
-      this._refresh().catch(() => undefined);
-    }
+  private _hassReady(): boolean {
+    const hass = this.hass;
+    if (!hass || hass.connected === false) return false;
+    return !hass.services || !!hass.services.homeassistant?.update_entity;
   }
 
   private _onVisibilityChange = (): void => {
@@ -113,6 +124,9 @@ export class BtsArrivalCard extends LitElement {
   };
 
   protected shouldUpdate(changed: PropertyValues): boolean {
+    // Runs on every `hass` change (render may be skipped below), so this is
+    // where a pending auto refresh notices the connection is back.
+    this._maybeAutoRefresh();
     if (!this._config) return false;
     if (!changed.has("hass") || changed.size > 1) return true;
     const old = changed.get("hass") as HomeAssistant | undefined;
@@ -217,7 +231,7 @@ export class BtsArrivalCard extends LitElement {
           .label=${strings.refresh}
           title=${strings.refresh}
           .disabled=${this._refreshing || this._cooldown}
-          @click=${this._refresh}
+          @click=${() => this._refresh()}
         >
           <ha-icon icon="mdi:refresh"></ha-icon>
         </ha-icon-button>
@@ -225,15 +239,19 @@ export class BtsArrivalCard extends LitElement {
     `;
   }
 
-  private async _refresh(): Promise<void> {
+  private async _refresh(silent = false): Promise<void> {
     if (!this.hass || !this._config || this._refreshing || this._cooldown) {
       return;
     }
     this._refreshing = true;
     try {
-      await this.hass.callService("homeassistant", "update_entity", {
-        entity_id: this._config.entities,
-      });
+      await this.hass.callService(
+        "homeassistant",
+        "update_entity",
+        { entity_id: this._config.entities },
+        undefined,
+        !silent,
+      );
     } finally {
       this._refreshing = false;
       this._cooldown = true;
